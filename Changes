@@ -1,3 +1,6 @@
+1.09  Mon, 26 Mar 2012 14:49:18 +0200
+  * Optionally integrate with event loops other than Tk
+
 1.07  Thu, 07 Jul 2011 17:08:25 +0200
   * First stand-alone release to CPAN. This release is identical to version 1.07
     as shipped with the perl code as of 5.13.3.
