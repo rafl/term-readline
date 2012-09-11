@@ -1,3 +1,6 @@
+1.10  Tue, 11 Sep 2012 10:30:58 -0400
+  * Don't use /dev/tty if it happens to exist on Windows.
+
 1.09  Mon, 26 Mar 2012 14:49:18 +0200
   * Optionally integrate with event loops other than Tk
 
