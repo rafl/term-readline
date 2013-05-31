@@ -339,8 +339,11 @@ if ($which) {
     # it is already in memory to avoid false exception as seen in:
     # PERL_RL=Stub perl -e'$SIG{__DIE__} = sub { print @_ }; require Term::ReadLine'
   } else {
-    (my $file = "Term::ReadLine::$which.pm") =~ s{::}{/}g;
-    eval { require $file };
+    my $package = "Term::ReadLine::$which";
+    (my $file = "$package.pm") =~ s{::}{/}g;
+    unless ($INC{$file} || $package->can('ReadLine')) {
+      require $file;
+    }
   }
 } elsif (defined $which and $which ne '') {	# Defined but false
   # Do nothing fancy
