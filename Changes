@@ -1,3 +1,6 @@
+NEXT
+  * Harden the loading of a custom ReadLine implementation (sartak)
+
 1.09  Mon, 26 Mar 2012 14:49:18 +0200
   * Optionally integrate with event loops other than Tk
 
