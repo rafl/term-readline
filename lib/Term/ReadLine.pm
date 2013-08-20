@@ -24,11 +24,11 @@ CPAN (under the C<Term::ReadLine::*> namespace).
 
 =head1 Minimal set of supported functions
 
-All the supported functions should be called as methods, i.e., either as 
+All the supported functions should be called as methods, i.e., either as
 
   $term = Term::ReadLine->new('name');
 
-or as 
+or as
 
   $term->addhistory('row');
 
@@ -105,7 +105,7 @@ All these commands are callable via method interface and have names
 which conform to standard conventions with the leading C<rl_> stripped.
 
 The stub package included with the perl distribution allows some
-additional methods: 
+additional methods:
 
 =over 12
 
@@ -181,7 +181,7 @@ None
 The environment variable C<PERL_RL> governs which ReadLine clone is
 loaded. If the value is false, a dummy interface is used. If the value
 is true, it should be tail of the name of the package to use, such as
-C<Perl> or C<Gnu>.  
+C<Perl> or C<Gnu>.
 
 As a special case, if the value of this variable is space-separated,
 the tail might be used to disable the ornaments by setting the tail to
@@ -193,7 +193,7 @@ empty, the best available package is loaded.
   export "PERL_RL=Perl o=0" # Use Perl ReadLine sans ornaments
   export "PERL_RL= o=0"     # Use best available ReadLine sans ornaments
 
-(Note that processing of C<PERL_RL> for ornaments is in the discretion of the 
+(Note that processing of C<PERL_RL> for ornaments is in the discretion of the
 particular used C<Term::ReadLine::*> package).
 
 =cut
@@ -266,7 +266,7 @@ sub findConsole {
 }
 
 sub new {
-  die "method new called with wrong number of arguments" 
+  die "method new called with wrong number of arguments"
     unless @_==2 or @_==4;
   #local (*FIN, *FOUT);
   my ($FIN, $FOUT, $ret);
@@ -293,7 +293,7 @@ sub new {
     select($sel);
     $ret = bless [$FIN, $FOUT];
   }
-  if ($ret->Features->{ornaments} 
+  if ($ret->Features->{ornaments}
       and not ($ENV{PERL_RL} and $ENV{PERL_RL} =~ /\bo\w*=0/)) {
     local $Term::ReadLine::termcap_nowarn = 1;
     $ret->ornaments(1);
@@ -329,10 +329,19 @@ package Term::ReadLine;		# So late to allow the above code be defined?
 
 our $VERSION = '1.09';
 
+our @ISA;
+my $isa_done;
 my ($which) = exists $ENV{PERL_RL} ? split /\s+/, $ENV{PERL_RL} : undef;
 if ($which) {
   if ($which =~ /\bgnu\b/i){
     eval "use Term::ReadLine::Gnu;";
+  } elsif ($which =~ /\bperl5\b/i) {
+      if (eval "use Term::ReadLine::Perl5; 1") {
+	  if (defined &Term::ReadLine::Perl5::readline) {
+	      @ISA = qw(Term::ReadLine::Perl5 Term::ReadLine::Stub);
+	      $isa_done = 1;
+	  }
+      }
   } elsif ($which =~ /\bperl\b/i) {
     eval "use Term::ReadLine::Perl;";
   } elsif ($which =~ /^(Stub|TermCap|Tk)$/) {
@@ -351,15 +360,18 @@ if ($which) {
 
 # To make possible switch off RL in debugger: (Not needed, work done
 # in debugger).
-our @ISA;
-if (defined &Term::ReadLine::Gnu::readline) {
-  @ISA = qw(Term::ReadLine::Gnu Term::ReadLine::Stub);
-} elsif (defined &Term::ReadLine::Perl::readline) {
-  @ISA = qw(Term::ReadLine::Perl Term::ReadLine::Stub);
-} elsif (defined $which && defined &{"Term::ReadLine::$which\::readline"}) {
-  @ISA = "Term::ReadLine::$which";
-} else {
-  @ISA = qw(Term::ReadLine::Stub);
+unless ($isa_done) {
+    if (defined &Term::ReadLine::Gnu::readline) {
+	@ISA = qw(Term::ReadLine::Gnu Term::ReadLine::Stub);
+    } elsif (defined &Term::ReadLine::Perl5::readline) {
+	@ISA = qw(Term::ReadLine::Perl5 Term::ReadLine::Stub);
+    } elsif (defined &Term::ReadLine::Perl::readline) {
+	@ISA = qw(Term::ReadLine::Perl Term::ReadLine::Stub);
+    } elsif (defined $which && defined &{"Term::ReadLine::$which\::readline"}) {
+	@ISA = "Term::ReadLine::$which";
+    } else {
+	@ISA = qw(Term::ReadLine::Stub);
+    }
 }
 
 package Term::ReadLine::TermCap;
@@ -373,7 +385,7 @@ our $rl_term_set = ',,,';
 our $terminal;
 sub LoadTermCap {
   return if defined $terminal;
-  
+
   require Term::Cap;
   $terminal = Tgetent Term::Cap ({OSPEED => 9600}); # Avoid warning.
 }
@@ -483,4 +495,3 @@ sub get_line {
 }
 
 1;
-
