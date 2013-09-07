@@ -1,3 +1,6 @@
+1.14  Sat, 07 Sep 2013 10:34:04 -0400
+  * Add Term::ReadLine::EditLine support.
+
 1.13  Sat, 07 Sep 2013 09:51:35 -0400
   * Fix a couple of typos.
 
