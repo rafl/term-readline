@@ -1,3 +1,6 @@
+1.12  Sat, 07 Sep 2013 09:50:01 -0400
+  * Minor documentation changes.
+
 1.11  Sat, 07 Sep 2013 09:45:30 -0400
   * Stop creating sys$command files w/o STDIN connected (msys).
   * Rational findConsole dispatch.
