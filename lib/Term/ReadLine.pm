@@ -181,7 +181,7 @@ None
 The environment variable C<PERL_RL> governs which ReadLine clone is
 loaded. If the value is false, a dummy interface is used. If the value
 is true, it should be tail of the name of the package to use, such as
-C<Perl> or C<Gnu>.
+C<Perl>, C<Perl5>, C<Gnu>, C<Stub>, C<TermCap>, or C<Tk>.
 
 As a special case, if the value of this variable is space-separated,
 the tail might be used to disable the ornaments by setting the tail to
