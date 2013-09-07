@@ -326,6 +326,8 @@ my ($which) = exists $ENV{PERL_RL} ? split /\s+/, $ENV{PERL_RL} : undef;
 if ($which) {
   if ($which =~ /\bgnu\b/i){
     eval "use Term::ReadLine::Gnu;";
+  } elsif ($which =~ /\bperl5\b/i) {
+    eval "use Term::ReadLine::Perl5;";
   } elsif ($which =~ /\bperl\b/i) {
     eval "use Term::ReadLine::Perl;";
   } elsif ($which =~ /^(Stub|TermCap|Tk)$/) {
@@ -349,6 +351,8 @@ if (defined &Term::ReadLine::Gnu::readline) {
   @ISA = qw(Term::ReadLine::Gnu Term::ReadLine::Stub);
 } elsif (defined &Term::ReadLine::EditLine::readline) {
   @ISA = qw(Term::ReadLine::EditLine Term::ReadLine::Stub);
+} elsif (defined &Term::ReadLine::Perl5::readline) {
+  @ISA = qw(Term::ReadLine::Perl5 Term::ReadLine::Stub);
 } elsif (defined &Term::ReadLine::Perl::readline) {
   @ISA = qw(Term::ReadLine::Perl Term::ReadLine::Stub);
 } elsif (defined $which && defined &{"Term::ReadLine::$which\::readline"}) {
