@@ -1,3 +1,7 @@
+1.11  Sat, 07 Sep 2013 09:45:30 -0400
+  * Stop creating sys$command files w/o STDIN connected (msys).
+  * Rational findConsole dispatch.
+
 1.10  Tue, 11 Sep 2012 10:30:58 -0400
   * Don't use /dev/tty if it happens to exist on Windows.
 
